@@ -1,7 +1,9 @@
+
 import streamlit as st
 import time
-from langchain.llms import Ollama
+from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
+import os
 
 # Liste noire de mots techniques à filtrer
 mots_interdits = [
@@ -27,7 +29,6 @@ Ce générateur vous fournit une architecture fonctionnelle claire et rigoureuse
 Elle repose sur les quatre piliers de la méthode ARTS : Accès, Récupération, Traitement et Synthèse. 
 À partir de cette architecture fonctionnelle, nous pourrons construire l’architecture technologique correspondante, en identifiant et en déployant les outils les plus adaptés pour créer des agents IA locaux, sur mesure et performants, tout en maintenant des coûts d’utilisation très faibles.
 """)
-
 # Initialisation du champ de saisie dans session_state
 if "description" not in st.session_state:
     st.session_state.description = ""
@@ -83,7 +84,7 @@ Voici la demande du client :
 Propose le plan ARTS clair et lisible.
 """)
 
-        llm = Ollama(model="mistral")
+        llm = OpenAI(openai_api_key=os.environ["OPENAI_API_KEY"])
         chain = template | llm
         st.session_state.reponse = chain.invoke({"description": st.session_state.description})
         elapsed = int(time.time() - start_time)
